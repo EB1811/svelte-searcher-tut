@@ -10,7 +10,6 @@
             (p: { name: string; url: string }) => p.name
         )
     }
-
     onMount(async () => {
         pokemonData = await getPokemonData()
     })
