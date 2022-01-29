@@ -50,6 +50,10 @@
         font-weight: 100;
     }
 
+    li {
+        font-size: 1.25rem;
+    }
+
     @media (min-width: 640px) {
         main {
             max-width: none;
