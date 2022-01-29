@@ -2,18 +2,18 @@
     import { onMount } from 'svelte'
 
     let pokemonData: string[] = []
-    const getPokemonData = async (): Promise<void> => {
+    const getPokemonData = async (): Promise<string[]> => {
         const rawPokemonData = await (
             await fetch('https://pokeapi.co/api/v2/pokemon?limit=99')
         ).json()
-        pokemonData = rawPokemonData.results.map(
+        return rawPokemonData.results.map(
             (p: { name: string; url: string }) => p.name
         )
     }
 
-    // onMount(async () => {
-    //     pokemonData = await getPokemonData()
-    // })
+    onMount(async () => {
+        pokemonData = await getPokemonData()
+    })
 
     let pokemonName: string = ''
 
@@ -29,6 +29,11 @@
 <main>
     <h1>Search</h1>
     <input type="text" bind:value="{pokemonName}" />
+    <ul>
+        {#each suggestions as suggestion}
+            <li>{suggestion}</li>
+        {/each}
+    </ul>
 </main>
 
 <style>
@@ -44,10 +49,6 @@
         text-transform: uppercase;
         font-size: 4em;
         font-weight: 100;
-    }
-
-    li {
-        font-size: 24px;
     }
 
     @media (min-width: 640px) {
