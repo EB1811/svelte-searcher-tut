@@ -1,17 +1,19 @@
 <script lang="ts">
     import { onMount } from 'svelte'
+    import Suggestion from './Suggestion.svelte'
 
     let pokemonData: string[] = []
-    const getPokemonData = async (): Promise<string[]> => {
-        const rawPokemonData = await (
-            await fetch('https://pokeapi.co/api/v2/pokemon?limit=99')
-        ).json()
-        return rawPokemonData.results.map(
-            (p: { name: string; url: string }) => p.name
-        )
-    }
-    onMount(async () => {
-        pokemonData = await getPokemonData()
+    onMount(() => {
+        const setPokemonData = async (): Promise<void> => {
+            const rawPokemonData = await (
+                await fetch('https://pokeapi.co/api/v2/pokemon?limit=99')
+            ).json()
+
+            pokemonData = rawPokemonData.results.map(
+                (p: { name: string; url: string }) => p.name
+            )
+        }
+        setPokemonData()
     })
 
     let pokemonName: string = ''
@@ -23,16 +25,28 @@
                   new RegExp(`^${pokemonName}`, `i`).test(v)
               )
             : pokemonData
+
+    let chosenPokemon: string = ''
+    let chosenPokemon2: string = ''
 </script>
 
 <main>
-    <h1>Search</h1>
-    <input type="text" bind:value="{pokemonName}" />
-    <ul>
+    <h1>Chose Your Pokemon</h1>
+    <h2>Chosen Pokemon 1: {chosenPokemon}</h2>
+    <h2>Chosen Pokemon 2: {chosenPokemon2}</h2>
+    <div class="search">
+        <span>Search: </span>
+        <input type="text" bind:value="{pokemonName}" />
         {#each suggestions as suggestion}
-            <li>{suggestion}</li>
+            <Suggestion
+                suggestion="{suggestion}"
+                on:chosePokemon="{(e) => {
+                    chosenPokemon = e.detail.pokemon
+                }}"
+                bind:chosenPokemon2
+            />
         {/each}
-    </ul>
+    </div>
 </main>
 
 <style>
@@ -50,10 +64,12 @@
         font-weight: 100;
     }
 
-    li {
-        font-size: 1.25rem;
+    h2 {
+        color: #ff3e00;
+        text-transform: uppercase;
+        font-size: 2em;
+        font-weight: 100;
     }
-
     @media (min-width: 640px) {
         main {
             max-width: none;
