@@ -21,32 +21,26 @@
     let suggestions: string[]
     $: suggestions =
         pokemonName.length > 0
-            ? pokemonData.filter((v) =>
-                  new RegExp(`^${pokemonName}`, `i`).test(v)
-              )
+            ? pokemonData.filter((name) => name.includes(pokemonName))
             : pokemonData
 
     let chosenPokemon: string = ''
-    let chosenPokemon2: string = ''
 </script>
 
 <main>
-    <h1>Chose Your Pokemon</h1>
-    <h2>Chosen Pokemon 1: {chosenPokemon}</h2>
-    <h2>Chosen Pokemon 2: {chosenPokemon2}</h2>
-    <div class="search">
-        <span>Search: </span>
-        <input type="text" bind:value="{pokemonName}" />
-        {#each suggestions as suggestion}
-            <Suggestion
-                suggestion="{suggestion}"
-                on:chosePokemon="{(e) => {
-                    chosenPokemon = e.detail.pokemon
-                }}"
-                bind:chosenPokemon2
-            />
-        {/each}
-    </div>
+    {#if pokemonData && pokemonData.length > 0}
+        <h1>Chose Your Pokemon</h1>
+        <h2>Chosen Pokemon 1: {chosenPokemon}</h2>
+        <div class="search">
+            <span>Search: </span>
+            <input type="text" bind:value="{pokemonName}" />
+            {#each suggestions as suggestion}
+                <Suggestion suggestion="{suggestion}" bind:chosenPokemon />
+            {/each}
+        </div>
+    {:else}
+        <h2>Loading...</h2>
+    {/if}
 </main>
 
 <style>
