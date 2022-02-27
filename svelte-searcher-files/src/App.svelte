@@ -1,34 +1,34 @@
 <script lang="ts">
-    import { onMount } from 'svelte'
+    import { pokemonData } from './stores.js'
     import Suggestion from './Suggestion.svelte'
 
-    let pokemonData: string[] = []
-    onMount(() => {
-        const setPokemonData = async (): Promise<void> => {
-            const rawPokemonData = await (
-                await fetch('https://pokeapi.co/api/v2/pokemon?limit=99')
-            ).json()
-
-            pokemonData = rawPokemonData.results.map(
-                (p: { name: string; url: string }) => p.name
-            )
-        }
-        setPokemonData()
-    })
+    // import { onMount } from 'svelte'
+    // let pokemonData: string[] = []
+    // onMount(() => {
+    // const setPokemonData = async (): Promise<void> => {
+    //     const rawPokemonData = await (
+    //         await fetch('https://pokeapi.co/api/v2/pokemon?limit=99')
+    //     ).json()
+    //     pokemonData = rawPokemonData.results.map(
+    //         (p: { name: string; url: string }) => p.name
+    //     )
+    // }
+    // setPokemonData()
+    // })
 
     let pokemonName: string = ''
 
     let suggestions: string[]
     $: suggestions =
         pokemonName.length > 0
-            ? pokemonData.filter((name) => name.includes(pokemonName))
-            : pokemonData
+            ? $pokemonData.filter((name) => name.includes(pokemonName))
+            : $pokemonData
 
     let chosenPokemon: string = ''
 </script>
 
 <main>
-    {#if pokemonData && pokemonData.length > 0}
+    {#if $pokemonData && $pokemonData.length > 0}
         <h1>Chose Your Pokemon</h1>
         <h2>Chosen Pokemon 1: {chosenPokemon}</h2>
         <div class="search">
