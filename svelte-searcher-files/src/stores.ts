@@ -9,6 +9,8 @@ const setPokemonData = async (set: Subscriber<string[]>): Promise<void> => {
         rawPokemonData.results.map((p: { name: string; url: string }) => p.name)
     )
 }
+
+// Export the new store 'pokemonData' variable.
 export const pokemonData: Readable<string[]> = readable([], (set) => {
     setPokemonData(set)
 

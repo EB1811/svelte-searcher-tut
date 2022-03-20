@@ -30,8 +30,9 @@
 <main>
     {#if $pokemonData && $pokemonData.length > 0}
         <h1>Chose Your Pokemon</h1>
-        <h2>Chosen Pokemon 1: {chosenPokemon}</h2>
-        <div class="search">
+        <h2>Chosen Pokemon: {chosenPokemon}</h2>
+
+        <div>
             <span>Search: </span>
             <input type="text" bind:value="{pokemonName}" />
             {#each suggestions as suggestion}
